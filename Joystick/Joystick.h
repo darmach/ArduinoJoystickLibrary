@@ -2,7 +2,7 @@
   Joystick.h
 
   
-  This is a modification of original Joystick.h 
+  This is a modification done by Jakub Darmach of original Joystick.h 
   from https://github.com/MHeironimus/ArduinoJoystickLibrary by Matthew Heironimus.
   
   Axes have been modified to 10 bit range, accepting and delivering 1024 bits of precision.

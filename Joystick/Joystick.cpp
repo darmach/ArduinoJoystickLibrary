@@ -1,7 +1,7 @@
 /*
   Joystick.cpp
 
-  This is a modification of original Joystick.h 
+  This is a modification done by Jaku Darmach of original Joystick.h 
   from https://github.com/MHeironimus/ArduinoJoystickLibrary by Matthew Heironimus.
   
   Axes have been modified to 10 bit range, accepting and delivering 1024 bits of precision.
@@ -32,8 +32,8 @@
 #if defined(_USING_HID)
 
 #define JOYSTICK_REPORT_ID 0x03
-//#define JOYSTICK_STATE_SIZE 16
-#define JOYSTICK_STATE_SIZE 18 		// bytes - report size is 2 bytes for each axis
+//#define JOYSTICK_STATE_SIZE 18
+#define JOYSTICK_STATE_SIZE 16 		// bytes - report size is 2 bytes for each axis
 
 static const uint8_t _hidReportDescriptor[] PROGMEM = {
   
@@ -44,16 +44,16 @@ static const uint8_t _hidReportDescriptor[] PROGMEM = {
 	0x85, JOYSTICK_REPORT_ID, //   REPORT_ID (3)
 
 	// 32 Buttons
-	//0x05, 0x09,			      //   USAGE_PAGE (Button)
-	//0x19, 0x01,			      //   USAGE_MINIMUM (Button 1)
-	//0x29, 0x20,			      //   USAGE_MAXIMUM (Button 32)
-	//0x15, 0x00,			      //   LOGICAL_MINIMUM (0)
-	//0x25, 0x01,			      //   LOGICAL_MAXIMUM (1)
-	//0x75, 0x01,			      //   REPORT_SIZE (1)
-	//0x95, 0x20,			      //   REPORT_COUNT (32)
-	//0x55, 0x00,			      //   UNIT_EXPONENT (0)
-	//0x65, 0x00,			      //   UNIT (None)
-	//0x81, 0x02,			      //   INPUT (Data,Var,Abs)
+	0x05, 0x09,			      //   USAGE_PAGE (Button)
+	0x19, 0x01,			      //   USAGE_MINIMUM (Button 1)
+	0x29, 0x20,			      //   USAGE_MAXIMUM (Button 32)
+	0x15, 0x00,			      //   LOGICAL_MINIMUM (0)
+	0x25, 0x01,			      //   LOGICAL_MAXIMUM (1)
+	0x75, 0x01,			      //   REPORT_SIZE (1)
+	0x95, 0x20,			      //   REPORT_COUNT (32)
+	0x55, 0x00,			      //   UNIT_EXPONENT (0)
+	0x65, 0x00,			      //   UNIT (None)
+	0x81, 0x02,			      //   INPUT (Data,Var,Abs)
 
 	// 10 bit Throttle and Steering
 	//0x05, 0x02,			      //   USAGE_PAGE (Simulation Controls)
@@ -96,14 +96,14 @@ static const uint8_t _hidReportDescriptor[] PROGMEM = {
 	0x75, 16,			      //   REPORT_SIZE (16)
 	0x09, 0x01,			      //   USAGE (Pointer)
 	0xA1, 0x00,			      //   COLLECTION (Physical)
-	0x09, 0x30,		          //		USAGE (x)
-	0x09, 0x31,		          //		USAGE (y)
-	0x09, 0x32,		          //		USAGE (z)
-	// 0x09, 0x33,		          //		USAGE (rx)
-	// 0x09, 0x34,		          //		USAGE (ry)
-	// 0x09, 0x35,		          //		USAGE (rz)
-	0x95, 0x09,		          //     	REPORT_COUNT (3)
-	0x81, 0x02,		          //     	INPUT (Data,Var,Abs)
+	0x09, 0x30,		          //     USAGE (x)
+	0x09, 0x31,		          //     USAGE (y)
+	0x09, 0x32,		          //     USAGE (z)
+	0x09, 0x33,		          //     USAGE (rx)
+	0x09, 0x34,		          //     USAGE (ry)
+	0x09, 0x35,		          //     USAGE (rz)
+	0x95, 0x06,		          //     REPORT_COUNT (6)
+	0x81, 0x02,		          //     INPUT (Data,Var,Abs)
 	0xc0,				      //   END_COLLECTION
  
 	0xc0				      // END_COLLECTION
@@ -213,16 +213,16 @@ void Joystick_::setHatSwitch(int8_t hatSwitchIndex, int16_t value)
 void Joystick_::sendState()
 {
 	uint16_t data[JOYSTICK_STATE_SIZE];
-//	uint32_t buttonTmp = buttons;
+	uint32_t buttonTmp = buttons;
 
 	// Split 32 bit button-state into 4 bytes
-	//data[0] = buttonTmp & 0xFF;		
-	//buttonTmp >>= 8;
-	//data[1] = buttonTmp & 0xFF;
-	//buttonTmp >>= 8;
-	//data[2] = buttonTmp & 0xFF;
-	//buttonTmp >>= 8;
-	//data[3] = buttonTmp & 0xFF;
+	data[0] = buttonTmp & 0xFF;		
+	buttonTmp >>= 16;
+	data[1] = buttonTmp & 0xFF;
+	// buttonTmp >>= 16;
+	// data[2] = buttonTmp & 0xFF;
+	// buttonTmp >>= 8;
+	// data[3] = buttonTmp & 0xFF;
 
 //	data[4] = throttle ;
 //	data[5] = rudder;
@@ -248,9 +248,9 @@ void Joystick_::sendState()
 	data[1] = yAxis;
 	data[2] = zAxis;
 
-	// data[3] = xAxisRotation;
-	// data[4] = yAxisRotation;
-	// data[5] = zAxisRotation;
+	data[3] = xAxisRotation;
+	data[4] = yAxisRotation;
+	data[5] = zAxisRotation;
 
 	//data[5] = (xAxisRotation % 360) * 0.708;
 	//data[6] = (yAxisRotation % 360) * 0.708;
