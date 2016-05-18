@@ -1,7 +1,7 @@
 /*
   Joystick.cpp
 
-  This is a modification done by Jaku Darmach of original Joystick.h 
+  This is a modification done by Jakub Darmach of original Joystick.h 
   from https://github.com/MHeironimus/ArduinoJoystickLibrary by Matthew Heironimus.
   
   Axes have been modified to 10 bit range, accepting and delivering 1024 bits of precision.
@@ -244,13 +244,13 @@ void Joystick_::sendState()
 	//// Pack hat-switch states into a single byte
 	// data[6] = (convertedHatSwitch[1] << 4) | (B00001111 & convertedHatSwitch[0]);
 	
-	data[0] = xAxis;
-	data[1] = yAxis;
-	data[2] = zAxis;
+	data[2] = xAxis;
+	data[3] = yAxis;
+	data[4] = zAxis;
 
-	data[3] = xAxisRotation;
-	data[4] = yAxisRotation;
-	data[5] = zAxisRotation;
+	data[5] = xAxisRotation;
+	data[6] = yAxisRotation;
+	data[7] = zAxisRotation;
 
 	//data[5] = (xAxisRotation % 360) * 0.708;
 	//data[6] = (yAxisRotation % 360) * 0.708;
