@@ -1,6 +1,15 @@
 /*
   Joystick.h
 
+  
+  This is a modification of original Joystick.h 
+  from https://github.com/MHeironimus/ArduinoJoystickLibrary by Matthew Heironimus.
+  
+  Axes have been modified to 10 bit range, accepting and delivering 1024 bits of precision.
+  Rest of the features (buttons, hats and so on) were removed (commented out) as I want to 
+  go step by step enabling them, learning about HID descriptor on the way.
+
+  Original credits:
   Copyright (c) 2015, Matthew Heironimus
 
   This library is free software; you can redistribute it and/or
@@ -36,7 +45,6 @@
 #warning "Using legacy HID core (non pluggable)"
 
 #else
-
 //================================================================================
 //================================================================================
 //  Joystick (Gamepad)
@@ -45,16 +53,17 @@ class Joystick_
 {
 private:
 	bool     autoSendState;
-	int8_t	 xAxis;
-	int8_t	 yAxis;
-	int8_t	 zAxis;
+	int16_t	 xAxis;
+	int16_t	 yAxis;
+	int16_t	 zAxis;
 	int16_t	 xAxisRotation;
 	int16_t	 yAxisRotation;
 	int16_t	 zAxisRotation;
 	uint32_t buttons;
-	uint8_t  throttle;
-	uint8_t  rudder;
+	uint16_t  throttle;
+	uint16_t  rudder;
 	int16_t	 hatSwitch[2];
+	
 
 public:
 	Joystick_();
@@ -62,9 +71,9 @@ public:
 	void begin(bool initAutoSendState = true);
 	void end();
 
-	void setXAxis(int8_t value);
-	void setYAxis(int8_t value);
-	void setZAxis(int8_t value);
+	void setXAxis(int16_t value);
+	void setYAxis(int16_t value);
+	void setZAxis(int16_t value);
 
 	void setXAxisRotation(int16_t value);
 	void setYAxisRotation(int16_t value);
@@ -74,8 +83,8 @@ public:
 	void pressButton(uint8_t button);
 	void releaseButton(uint8_t button);
 
-	void setThrottle(uint8_t value);
-	void setRudder(uint8_t value);
+	void setThrottle(uint16_t value);
+	void setRudder(uint16_t value);
 
 	void setHatSwitch(int8_t hatSwitch, int16_t value);
 
