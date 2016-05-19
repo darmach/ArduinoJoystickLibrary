@@ -216,9 +216,9 @@ void Joystick_::sendState()
 	uint32_t buttonTmp = buttons;
 
 	// Split 32 bit button-state into 4 bytes
-	data[0] = buttonTmp & 0xFF;		
+	data[0] = buttonTmp & 0xFFFF;		
 	buttonTmp >>= 16;
-	data[1] = buttonTmp & 0xFF;
+	data[1] = buttonTmp & 0xFFFF;
 	// buttonTmp >>= 16;
 	// data[2] = buttonTmp & 0xFF;
 	// buttonTmp >>= 8;
