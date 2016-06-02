@@ -33,7 +33,7 @@
 
 #define JOYSTICK_REPORT_ID 0x03
 //#define JOYSTICK_STATE_SIZE 18
-#define JOYSTICK_STATE_SIZE 17 		// bytes - report size is 2 bytes for each axis
+#define JOYSTICK_STATE_SIZE 16 		// bytes - report size is 2 bytes for each axis
 
 static const uint8_t _hidReportDescriptor[] PROGMEM = {
   
@@ -68,29 +68,29 @@ static const uint8_t _hidReportDescriptor[] PROGMEM = {
 	//0xc0,				          //   END_COLLECTION
 
 	// Two Hat switches (8 Positions)
-	0x05, 0x01,			      //   USAGE_PAGE (Generic Desktop)
-	0x09, 0x39,			      //   USAGE (Hat switch)
-	0x15, 0x00,			      //   LOGICAL_MINIMUM (0)
-	0x25, 0x07,			      //   LOGICAL_MAXIMUM (7)
-	0x35, 0x00,			      //   PHYSICAL_MINIMUM (0)
-	0x46, 0x3B, 0x01,	      //   PHYSICAL_MAXIMUM (315)
-	0x65, 0x14,			      //   UNIT (Eng Rot:Angular Pos)
-	0x75, 0x04,			      //   REPORT_SIZE (8)
-	0x95, 0x01,			      //   REPORT_COUNT (1)
-	0x81, 0x02,			      //   INPUT (Data,Var,Abs)
+	// 0x05, 0x01,			      //   USAGE_PAGE (Generic Desktop)
+	// 0x09, 0x39,			      //   USAGE (Hat switch)
+	// 0x15, 0x00,			      //   LOGICAL_MINIMUM (0)
+	// 0x25, 0x07,			      //   LOGICAL_MAXIMUM (7)
+	// 0x35, 0x00,			      //   PHYSICAL_MINIMUM (0)
+	// 0x46, 0x3B, 0x01,	      //   PHYSICAL_MAXIMUM (315)
+	// 0x65, 0x14,			      //   UNIT (Eng Rot:Angular Pos)
+	// 0x75, 0x04,			      //   REPORT_SIZE (4)
+	// 0x95, 0x01,			      //   REPORT_COUNT (1)
+	// 0x81, 0x02,			      //   INPUT (Data,Var,Abs)
                               
-	0x09, 0x39,			      //   USAGE (Hat switch)
-	0x15, 0x00,			      //   LOGICAL_MINIMUM (0)
-	0x25, 0x07,			      //   LOGICAL_MAXIMUM (7)
-	0x35, 0x00,			      //   PHYSICAL_MINIMUM (0)
-	0x46, 0x3B, 0x01,	      //   PHYSICAL_MAXIMUM (315)
-	0x65, 0x14,			      //   UNIT (Eng Rot:Angular Pos)
-	0x75, 0x04,			      //   REPORT_SIZE (8)
-	0x95, 0x01,			      //   REPORT_COUNT (1)
-	0x81, 0x02,			      //   INPUT (Data,Var,Abs)
+	// 0x09, 0x39,			      //   USAGE (Hat switch)
+	// 0x15, 0x00,			      //   LOGICAL_MINIMUM (0)
+	// 0x25, 0x07,			      //   LOGICAL_MAXIMUM (7)
+	// 0x35, 0x00,			      //   PHYSICAL_MINIMUM (0)
+	// 0x46, 0x3B, 0x01,	      //   PHYSICAL_MAXIMUM (315)
+	// 0x65, 0x14,			      //   UNIT (Eng Rot:Angular Pos)
+	// 0x75, 0x04,			      //   REPORT_SIZE (4)
+	// 0x95, 0x01,			      //   REPORT_COUNT (1)
+	// 0x81, 0x02,			      //   INPUT (Data,Var,Abs)
 	
 	// X, Y, and Z Axis
-//	0x05, 0x01,			      //   USAGE_PAGE (Generic Desktop)  // added J.D.
+	0x05, 0x01,			      //   USAGE_PAGE (Generic Desktop)  // added J.D.
 	0x15, 0x00,			      //   LOGICAL_MINIMUM (0)
 	0x26, 0xff, 0x03,	      //   LOGICAL_MAXIMUM (1023)
 	0x75, 16,			      //   REPORT_SIZE (16)
@@ -227,30 +227,30 @@ void Joystick_::sendState()
 //	data[4] = throttle ;
 //	data[5] = rudder;
 	
-	// Calculate hat-switch values
-	uint8_t convertedHatSwitch[2];
-	for (int hatSwitchIndex = 0; hatSwitchIndex < 2; hatSwitchIndex++)
-	{
-		if (hatSwitch[hatSwitchIndex] < 0)
-		{
-			convertedHatSwitch[hatSwitchIndex] = 8;
-		}
-		else
-		{
-			convertedHatSwitch[hatSwitchIndex] = (hatSwitch[hatSwitchIndex] % 360) / 45;
-		}
-	}
+	//// Calculate hat-switch values
+	// uint8_t convertedHatSwitch[2];
+	// for (int hatSwitchIndex = 0; hatSwitchIndex < 2; hatSwitchIndex++)
+	// {
+		// if (hatSwitch[hatSwitchIndex] < 0)
+		// {
+			// convertedHatSwitch[hatSwitchIndex] = 8;
+		// }
+		// else
+		// {
+			// convertedHatSwitch[hatSwitchIndex] = (hatSwitch[hatSwitchIndex] % 360) / 45;
+		// }
+	// }
 
-	// Pack hat-switch states into a single byte
-	data[2] = (convertedHatSwitch[1] << 8) | (0xFF & convertedHatSwitch[0]);
+	//// Pack hat-switch states into a single byte
+	// data[6] = (convertedHatSwitch[1] << 4) | (B00001111 & convertedHatSwitch[0]);
 	
-	data[3] = xAxis;
-	data[4] = yAxis;
-	data[5] = zAxis;
+	data[2] = xAxis;
+	data[3] = yAxis;
+	data[4] = zAxis;
 
-	data[6] = xAxisRotation;
-	data[7] = yAxisRotation;
-	data[8] = zAxisRotation;
+	data[5] = xAxisRotation;
+	data[6] = yAxisRotation;
+	data[7] = zAxisRotation;
 
 	//data[5] = (xAxisRotation % 360) * 0.708;
 	//data[6] = (yAxisRotation % 360) * 0.708;
